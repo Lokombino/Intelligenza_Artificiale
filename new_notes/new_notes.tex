@@ -8,9 +8,9 @@
 % ---------- Matematica e font ----------
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{mathtools}
-\usepackage{newpxtext, newpxmath}          
-\usepackage[scale=0.95]{sourcesans}       
-\usepackage[scale=0.95]{inconsolata}       
+\usepackage{newpxtext, newpxmath}
+\usepackage[scale=0.95]{sourcesans}
+\usepackage[scale=0.95]{inconsolata}
 \usepackage{bm}
 \usepackage{microtype}
 \linespread{1.08}
@@ -19,16 +19,17 @@
 \usepackage[left=2.3cm, right=2.3cm, top=2.3cm, bottom=2.3cm]{geometry}
 \usepackage[table]{xcolor}
 
-\definecolor{sfondo}{HTML}{15181E}
-\definecolor{sfondobox}{HTML}{1F242C}
-\definecolor{bordo}{HTML}{3A424E}
-\definecolor{testo}{HTML}{E4E7EB}
-\definecolor{tenue}{HTML}{9AA4B2}
-\definecolor{accento}{HTML}{6CB6FF}
-\definecolor{ambra}{HTML}{E8B15D}
-\definecolor{verde}{HTML}{7CCB97}
-\definecolor{rosso}{HTML}{EE8A84}
-\definecolor{viola}{HTML}{C3A6F5}
+% Palette: nero-verde di base, verde come accento, arancione solo per ciò che è cruciale
+\definecolor{sfondo}{HTML}{0D110E}      % nero con una punta di verde
+\definecolor{sfondobox}{HTML}{151C17}   % fondo dei riquadri
+\definecolor{bordo}{HTML}{2B3B30}       % linee e filetti
+\definecolor{testo}{HTML}{C8CEC9}       % grigio chiaro (non bianco)
+\definecolor{tenue}{HTML}{87928A}       % grigio secondario
+\definecolor{verde}{HTML}{5CC98A}       % accento principale
+\definecolor{verdechiaro}{HTML}{9FDDB4} % accento secondario (esempi)
+\definecolor{verdeacido}{HTML}{B4D46A}  % proprietà
+\definecolor{verdescuro}{HTML}{3C8F5F}  % dettagli
+\definecolor{arancio}{HTML}{F0954A}     % solo per l'essenziale
 
 \pagecolor{sfondo}
 \color{testo}
@@ -44,30 +45,33 @@
 \usepackage{array}
 \usepackage{titlesec}
 \usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
 
 \forestset{
   default preamble={
     for tree={
-      draw=gray,
-      fill=rgb:red,0.2;green,0.2;blue,0.2,
+      draw=bordo,
+      fill=sfondobox,
       rounded corners,
       node options={align=center},
       font=\sffamily\small,
-      edge={color=gray, line width=1pt}
+      edge={color=verdescuro, line width=1pt}
     }
   }
 }
 
 % ---------- Titoli ----------
+% Il titolo di sezione è arancione (la cosa più importante della pagina),
+% la numerazione e i sottotitoli sono verdi.
 \renewcommand{\thesubsection}{\arabic{subsection}}
 
 \titleformat{\section}
-  {\sffamily\bfseries\LARGE\color{testo}}{}{0pt}{}
-  [\vspace{2pt}{\color{accento}\titlerule[1.2pt]}]
+  {\sffamily\bfseries\LARGE\color{arancio}}{}{0pt}{}
+  [\vspace{2pt}{\color{verdescuro}\titlerule[1.2pt]}]
 \titleformat{\subsection}
-  {\sffamily\bfseries\Large\color{testo}}{\textcolor{accento}{\thesubsection}}{0.6em}{}
+  {\sffamily\bfseries\Large\color{testo}}{\textcolor{verde}{\thesubsection}}{0.6em}{}
 \titleformat{\subsubsection}
-  {\sffamily\bfseries\large\color{accento}}{}{0pt}{}
+  {\sffamily\bfseries\large\color{verde}}{}{0pt}{}
 
 \titlespacing*{\section}{0pt}{0.5\baselineskip}{0.8\baselineskip}
 \titlespacing*{\subsection}{0pt}{1.5\baselineskip}{0.4\baselineskip}
@@ -75,9 +79,12 @@
 
 % ---------- Elenchi ----------
 \setlist{topsep=2pt, itemsep=2pt, parsep=0pt}
-\setlist[itemize,1]{label=\textcolor{accento}{\textbullet}, leftmargin=1.3em}
+\setlist[itemize,1]{label=\textcolor{verde}{\textbullet}, leftmargin=1.3em}
 \setlist[itemize,2]{label=\textcolor{tenue}{--}, leftmargin=1.2em}
-\setlist[enumerate,1]{label=\textcolor{accento}{\sffamily\bfseries\arabic*}, leftmargin=1.3em}
+\setlist[enumerate,1]{label=\textcolor{verde}{\sffamily\bfseries\arabic*}, leftmargin=1.3em}
+
+% ---------- Testo ----------
+\renewcommand{\emph}[1]{\textcolor{verdechiaro}{\itshape #1}}
 
 % ---------- Box ----------
 \tcbset{
@@ -95,24 +102,27 @@
   }
 }
 
-\newtcolorbox{defbox}[1]{appunti=accento, title={#1}}
-\newtcolorbox{esempio}[1][Esempio]{appunti=ambra, title={#1}}
-\newtcolorbox{riepilogo}[1]{appunti=verde, title={#1}}
-\newtcolorbox{proprietà}[1]{appunti=viola, title={#1}}
+\newtcolorbox{defbox}[1]{appunti=verde, title={#1}}
+\newtcolorbox{esempio}[1][Esempio]{appunti=verdechiaro, title={#1}}
+\newtcolorbox{riepilogo}[1]{appunti=verdescuro, title={#1}}
+\newtcolorbox{proprietà}[1]{appunti=verdeacido, title={#1}}
+% Riservato ai risultati fondamentali (da sapere a memoria)
+\newtcolorbox{chiave}[1]{appunti=arancio, title={#1},
+  colback=arancio!6!sfondobox}
 
 % ---------- Pseudocodice ----------
 \lstdefinelanguage{pseudo}{
   sensitive=true,
   alsoletter={-?},
-  morekeywords={function, returns, return, if, then, else, do, and, static, inputs, while, an, loop, for, each, in},
+  morekeywords={function, returns, return, if, then, else, do, and, static, inputs, while, an, loop, for, each, in, unless, local, variables},
   emph={true, false},
-  emphstyle=\color{ambra}
+  emphstyle=\color{verdeacido}
 }
 
 \lstdefinestyle{pseudostile}{
   language=pseudo,
   basicstyle=\ttfamily\small\color{testo},
-  keywordstyle=\color{accento}\bfseries,
+  keywordstyle=\color{verde}\bfseries,
   columns=fullflexible,
   keepspaces=true,
   breaklines=true,
@@ -130,12 +140,19 @@
 
 % ---------- Tabelle ----------
 \arrayrulecolor{bordo}
-\newcommand{\intest}[1]{\textcolor{accento}{\sffamily\bfseries #1}}
+\newcommand{\intest}[1]{\textcolor{verde}{\sffamily\bfseries #1}}
 \newcommand{\vero}{\textcolor{verde}{V}}
-\newcommand{\falso}{\textcolor{rosso}{F}}
+\newcommand{\falso}{\textcolor{tenue}{F}}
 \newcommand{\nota}[1]{\textcolor{tenue}{#1}}
 
+% ---------- Macro ----------
 \newcommand{\KB}{\mathrm{KB}}
+\newcommand{\Pv}{\mathbf{P}}               % distribuzione (vettore)
+\newcommand{\tup}[1]{\langle #1 \rangle}    % vettore di probabilità
+\newcommand{\known}{\mathit{known}}
+\newcommand{\fringe}{\mathit{fringe}}
+\newcommand{\other}{\mathit{other}}
+\newcommand{\unknown}{\mathit{unknown}}
 
 
 \begin{document}
@@ -143,86 +160,88 @@
 % ---------- Intestazione ----------
 \begingroup
   \raggedright
-  {\sffamily\bfseries\Huge Intelligenza artificiale\par}
+  {\sffamily\bfseries\Huge\color{arancio} Intelligenza artificiale\par}
   \vspace{4pt}
   {\sffamily\color{tenue} Giorgio Poluzzi \quad·\quad \today\par}
 \endgroup
 \vspace{1.6\baselineskip}
 
-\section*{Logical Agents}
+% =====================================================================
+\section{Logical Agents}
+% =====================================================================
 
 \subsection{Agente logico}
 
-Un \textbf{agente logico} ha due componenti:
+Un \textbf{agente basato sulla conoscenza} (agente logico) è costituito da due componenti distinte:
 
 \begin{itemize}
-  \item \textbf{Knowledge base (KB)}: insieme di frasi scritte in un linguaggio formale; costituisce il contenuto specifico del dominio;
-  \item \textbf{Motore inferenziale}: algoritmi generici, indipendenti dal dominio, che ricavano nuove frasi a partire da quelle già presenti.
+  \item \textbf{Knowledge base (KB)}: un insieme di \emph{frasi} espresse in un linguaggio formale; rappresenta ciò che l'agente sa del dominio;
+  \item \textbf{Motore inferenziale}: un insieme di algoritmi generali, indipendenti dal dominio, che derivano nuove frasi a partire da quelle già presenti nella KB.
 \end{itemize}
 
-L'approccio è \textbf{dichiarativo}: si comunica all'agente cosa sa e gli si chiede cosa fare (\textbf{Tell \& Ask}).
+L'approccio è \textbf{dichiarativo}: non si programma il comportamento dell'agente passo per passo, ma gli si comunica ciò che deve sapere (\textbf{Tell}) e gli si chiede che cosa fare (\textbf{Ask}); sarà l'inferenza a ricavare la risposta.
 
 Un agente si può descrivere a due livelli:
 \begin{itemize}
-  \item \textbf{livello di conoscenza}: cosa sa;
-  \item \textbf{livello implementativo}: quali strutture dati e algoritmi utilizza.
+  \item \textbf{livello della conoscenza}: \emph{che cosa} sa l'agente;
+  \item \textbf{livello implementativo}: \emph{come} tale conoscenza è realizzata (strutture dati e algoritmi).
 \end{itemize}
 
 \subsubsection*{Il ciclo dell'agente}
 
-A ogni passo l'agente ripete lo stesso ciclo:
+A ogni istante $t$ l'agente esegue il medesimo ciclo:
 \begin{enumerate}
-  \item \textbf{Tell}: comunica alla KB la percezione al tempo $t$;
-  \item \textbf{Ask}: chiede alla KB quale azione compiere;
+  \item \textbf{Tell}: comunica alla KB la percezione ricevuta al tempo $t$;
+  \item \textbf{Ask}: interroga la KB su quale azione compiere;
   \item \textbf{Tell}: registra nella KB l'azione scelta;
   \item incrementa $t$ e restituisce l'azione.
 \end{enumerate}
 
-Per funzionare, un agente deve saper:
+Affinché questo schema funzioni, l'agente deve essere in grado di:
 \begin{itemize}
   \item rappresentare stati e azioni;
-  \item integrare nuove percezioni;
+  \item incorporare nuove percezioni;
   \item aggiornare la propria rappresentazione del mondo;
-  \item dedurre proprietà nascoste del mondo;
-  \item dedurre le azioni corrette da eseguire.
+  \item dedurre le proprietà del mondo che non osserva direttamente;
+  \item dedurre quali azioni siano appropriate.
 \end{itemize}
 
 \subsection{Logica, modelli, entailment e inferenza}
 
 \begin{defbox}{Logica}
-  Linguaggio formale per rappresentare informazioni da cui trarre conclusioni. Ha due ingredienti:
+  Linguaggio formale per rappresentare informazioni in modo che se ne possano trarre conclusioni. È definita da due elementi:
   \begin{itemize}
-    \item \textbf{sintassi}: quali frasi sono ben formate;
-    \item \textbf{semantica}: il significato delle frasi, cioè quando una frase è vera in un certo modello.
+    \item \textbf{sintassi}: stabilisce quali frasi sono ben formate;
+    \item \textbf{semantica}: attribuisce un significato alle frasi, cioè stabilisce quando una frase è vera in un dato modello.
   \end{itemize}
 \end{defbox}
 
 \begin{defbox}{Modello}
-  Mondo formalizzato in cui si può valutare se una frase è vera oppure falsa.
+  Un mondo formalizzato rispetto al quale è possibile stabilire se una frase è vera o falsa.
   \begin{itemize}
     \item $m$ è un \textbf{modello} di $\alpha$ se $\alpha$ è vera in $m$;
-    \item $M(\alpha)$ è l'insieme di tutti i modelli di $\alpha$.
+    \item $M(\alpha)$ indica l'insieme di tutti i modelli di $\alpha$.
   \end{itemize}
 \end{defbox}
 
-\begin{defbox}{Entailment (conseguenza logica)}
-  $\KB \models \alpha$ (``KB implica logicamente $\alpha$'') significa che $\alpha$ è vera in \textbf{ogni} modello in cui KB è vera. In termini di insiemi:
+\begin{chiave}{Entailment (conseguenza logica)}
+  $\KB \models \alpha$ (``la KB implica logicamente $\alpha$'') significa che $\alpha$ è vera in \textbf{ogni} modello in cui la KB è vera. In termini insiemistici:
   \[
     \KB \models \alpha \iff M(\KB) \subseteq M(\alpha)
   \]
-\end{defbox}
+\end{chiave}
 
 \begin{esempio}
   Se $\KB = \{P \land Q\}$ e $\alpha = P$, allora $\KB \models \alpha$: in ogni modello in cui $P \land Q$ è vera, anche $P$ è vera.
 \end{esempio}
 
 \begin{defbox}{Inferenza}
-  $\KB \vdash_i \alpha$ significa che $\alpha$ può essere derivata dalla KB usando la procedura $i$.
+  $\KB \vdash_i \alpha$ significa che $\alpha$ può essere \emph{derivata} dalla KB mediante la procedura $i$.
 \end{defbox}
 
-\textbf{Perché serve.} Le conseguenze di una KB sono tantissime e $\alpha$ è quasi impossibile da indovinare: l'\textbf{entailment} stabilisce che $\alpha$ segue dalla KB, l'\textbf{inferenza} fornisce il metodo per trovarla.
+\textbf{Perché distinguere i due concetti.} L'entailment è una relazione \emph{semantica}: dice che $\alpha$ segue dalla KB, ma non dice come trovarla. L'inferenza è un procedimento \emph{sintattico}: è il metodo concreto con cui l'agente costruisce $\alpha$ manipolando le frasi.
 
-Una procedura $i$ si valuta con due proprietà:
+Una procedura di inferenza $i$ si giudica in base a due proprietà:
 
 \begin{center}
   \renewcommand{\arraystretch}{1.35}
@@ -230,8 +249,8 @@ Una procedura $i$ si valuta con due proprietà:
     \toprule
     \intest{Proprietà} & \intest{Significato} & \intest{Formula} \\
     \midrule
-    Correttezza & deriva \textbf{soltanto} cose vere & se $\KB \vdash_i \alpha$, allora $\KB \models \alpha$ \\
-    Completezza & deriva \textbf{tutto} ciò che è vero & se $\KB \models \alpha$, allora $\KB \vdash_i \alpha$ \\
+    Correttezza & deriva \textbf{soltanto} frasi implicate & se $\KB \vdash_i \alpha$, allora $\KB \models \alpha$ \\
+    Completezza & deriva \textbf{tutte} le frasi implicate & se $\KB \models \alpha$, allora $\KB \vdash_i \alpha$ \\
     \bottomrule
   \end{tabular}
 \end{center}
@@ -239,11 +258,11 @@ Una procedura $i$ si valuta con due proprietà:
 \clearpage
 \subsection{Logica proposizionale}
 
-È la logica più semplice.
+È la logica più semplice: il suo mondo è descritto unicamente da proposizioni vere o false.
 
 \subsubsection*{Sintassi}
 
-I simboli $P_1, P_2, \dots$ sono \textbf{frasi atomiche}. Date le frasi $S, S_1, S_2$, si costruiscono nuove frasi così:
+I simboli $P_1, P_2, \dots$ sono \textbf{frasi atomiche}. Date le frasi $S, S_1, S_2$, si costruiscono frasi complesse mediante i connettivi:
 
 \begin{center}
   \renewcommand{\arraystretch}{1.25}
@@ -262,15 +281,15 @@ I simboli $P_1, P_2, \dots$ sono \textbf{frasi atomiche}. Date le frasi $S, S_1,
 
 \subsubsection*{Semantica}
 
-Un \textbf{modello} assegna vero (\vero) o falso (\falso) a ogni simbolo, per esempio $P_{1,2}=F$, $P_{2,2}=F$, $P_{3,1}=V$. Con 3 simboli ci sono $2^3 = 8$ modelli, enumerabili automaticamente.
+Un \textbf{modello} assegna un valore di verità, vero (\vero) o falso (\falso), a ogni simbolo; ad esempio $P_{1,2}=F$, $P_{2,2}=F$, $P_{3,1}=V$. Con $n$ simboli esistono $2^n$ modelli (con 3 simboli, $2^3 = 8$), che possono essere enumerati in modo automatico.
 
 \textbf{Regole di valutazione:}
 \begin{itemize}
-  \item $\lnot S$ è vera se $S$ è falsa;
-  \item $S_1 \land S_2$ è vera se entrambe sono vere;
-  \item $S_1 \lor S_2$ è vera se almeno una è vera;
-  \item $S_1 \Rightarrow S_2$ è falsa \textbf{solo} quando $S_1$ è vera e $S_2$ è falsa;
-  \item $S_1 \Leftrightarrow S_2$ è vera quando valgono entrambe le implicazioni ($S_1 \Rightarrow S_2$ e $S_2 \Rightarrow S_1$).
+  \item $\lnot S$ è vera se e solo se $S$ è falsa;
+  \item $S_1 \land S_2$ è vera se e solo se entrambe sono vere;
+  \item $S_1 \lor S_2$ è vera se e solo se almeno una è vera;
+  \item $S_1 \Rightarrow S_2$ è falsa \textbf{soltanto} quando $S_1$ è vera e $S_2$ è falsa;
+  \item $S_1 \Leftrightarrow S_2$ è vera quando valgono entrambe le implicazioni $S_1 \Rightarrow S_2$ e $S_2 \Rightarrow S_1$.
 \end{itemize}
 
 \textbf{Tavola di verità:}
@@ -290,7 +309,7 @@ Un \textbf{modello} assegna vero (\vero) o falso (\falso) a ogni simbolo, per es
 \end{center}
 
 \begin{esempio}[Esempio di valutazione ricorsiva]
-  Con il modello di sopra:
+  Con il modello indicato sopra:
   \[
     \lnot P_{1,2} \land (P_{2,2} \lor P_{3,1}) = V \land (F \lor V) = V \land V = V
   \]
@@ -299,9 +318,9 @@ Un \textbf{modello} assegna vero (\vero) o falso (\falso) a ogni simbolo, per es
 \clearpage
 \subsection{Inferenza per enumerazione}
 
-Si enumerano i modelli con una \textbf{ricerca in profondità} (depth-first search): a ogni passo si fissa un simbolo a vero e poi a falso. $\KB \models \alpha$ vale se $\alpha$ è vera in tutti i modelli in cui è vera la KB.
+Per verificare $\KB \models \alpha$ si enumerano tutti i modelli mediante una \textbf{ricerca in profondità}: a ogni livello si fissa un simbolo prima a vero e poi a falso. L'entailment vale se $\alpha$ risulta vera in tutti i modelli in cui è vera la KB. L'algoritmo è corretto e completo, ma ha costo $O(2^n)$ nel tempo.
 
-\begin{codice}{Inference by enumeration 1}
+\begin{codice}{TT-Entails? (1/2)}
 function TT-Entails?(KB, $\alpha$) returns true or false
   inputs: KB, $\text{knowledge base, a sentence in prop logic}$
           $\alpha$, $\text{a query, sentence in prop logic}$
@@ -310,7 +329,7 @@ function TT-Entails?(KB, $\alpha$) returns true or false
   return TT-Check-All(KB, $\alpha$, symbols, [])
 \end{codice}
 
-\begin{codice}{Inference by enumeration 2}
+\begin{codice}{TT-Check-All (2/2)}
 function TT-Check-All(KB, $\alpha$, symbols, model) returns true or false
   if Empty?(symbols) then
     if PL-True?(KB, model) then return PL-True?($\alpha$, model)
@@ -327,17 +346,17 @@ function TT-Check-All(KB, $\alpha$, symbols, model) returns true or false
   \begin{defbox}{Model checking}
     \raggedright
     \begin{itemize}
-      \item enumerazione con tavole di verità
-      \item backtracking (DPLL)
-      \item ricerca locale euristica, min-conflicts/hill-climbing
+      \item enumerazione con tavole di verità;
+      \item backtracking (DPLL);
+      \item ricerca locale euristica (min-conflicts, hill-climbing).
     \end{itemize}
   \end{defbox}
-  \begin{defbox}{Applicazione delle regole di inferenza}
+  \begin{defbox}{Applicazione di regole di inferenza}
     \raggedright
     \begin{itemize}
-      \item si generano frasi nuove sulla base di quelle vecchie
-      \item una dimostrazione è una sequenza di applicazioni di regole
-      \item viene richiesto di portare le frasi in forma normale
+      \item si generano nuove frasi a partire da quelle esistenti;
+      \item una dimostrazione è una sequenza di applicazioni di regole;
+      \item in genere richiede di portare le frasi in una forma normale.
     \end{itemize}
   \end{defbox}
 \end{tcbraster}
@@ -345,7 +364,7 @@ function TT-Check-All(KB, $\alpha$, symbols, model) returns true or false
 \subsection{Equivalenza logica}
 
 \begin{defbox}{Definizione}
-  Due frasi sono equivalenti se e solo se sono vere negli stessi modelli, ovvero se una implica l'altra:
+  Due frasi sono logicamente equivalenti se e solo se sono vere negli stessi modelli, ossia se ciascuna implica l'altra:
   \[
     \alpha \equiv \beta \iff \alpha \models \beta \ \text{ e } \ \beta \models \alpha
   \]
@@ -378,12 +397,12 @@ function TT-Check-All(KB, $\alpha$, symbols, model) returns true or false
   \end{tabular}
 \end{center}
 
-\subsection{Validità \& soddisfacibilità}
+\subsection{Validità e soddisfacibilità}
 
 \begin{tcbraster}[raster columns=3, raster equal height, raster column skip=10pt, raster before skip=8pt, raster after skip=10pt]
   \begin{defbox}{Validità}
     \raggedright
-    Una proposizione è valida (tautologia) se è vera in tutti i modelli.
+    Una frase è \textbf{valida} (tautologia) se è vera in tutti i modelli.
     \begin{esempio}
       $A \lor \lnot A$ \\
       $A \Rightarrow A$ \\
@@ -392,138 +411,686 @@ function TT-Check-All(KB, $\alpha$, symbols, model) returns true or false
   \end{defbox}
   \begin{defbox}{Soddisfacibilità}
     \raggedright
-    Una proposizione è soddisfacibile se è vera in almeno un modello.
+    Una frase è \textbf{soddisfacibile} se è vera in almeno un modello.
     \begin{esempio}
       $A \lor B$ \\
       $C$
     \end{esempio}
   \end{defbox}
-  \begin{defbox}{Insoddisfacibile}
+  \begin{defbox}{Insoddisfacibilità}
     \raggedright
-    Una proposizione è insoddisfacibile se non è vera in nessun modello.
+    Una frase è \textbf{insoddisfacibile} se non è vera in alcun modello.
     \begin{esempio}
       $A \land \lnot A$
     \end{esempio}
   \end{defbox}
 \end{tcbraster}
 
-\subsubsection*{Approccio con l'inferenza}
+\subsubsection*{Collegamento con l'inferenza}
 
-  Teorema di deduzione:
+Questi concetti consentono di ricondurre l'entailment a una verifica di validità o di insoddisfacibilità:
 
+\begin{chiave}{Teorema di deduzione e refutazione}
   \begin{itemize}
-    \item   $\KB \models \alpha \iff (\KB \Rightarrow \alpha)$ è valida.
+    \item \textbf{Teorema di deduzione}: $\KB \models \alpha \iff (\KB \Rightarrow \alpha)$ è valida;
+    \item \textbf{Refutazione} (dimostrazione per assurdo): $\KB \models \alpha \iff (\KB \land \lnot\alpha)$ è insoddisfacibile.
   \end{itemize}
-  Refutazione:
-  \begin{itemize}
-    \item $\KB \models \alpha \iff (\KB \land \lnot\alpha)$ è insoddisfacibile.
-  \end{itemize}
+\end{chiave}
 
 \begin{defbox}{Sistema di inferenza}
-  Un sistema di inferenza è un insieme di regole $\mathcal{R}$ della forma:
+  Un sistema di inferenza è un insieme $\mathcal{R}$ di regole della forma:
   \[
     \frac{A_1 \ \dots \ A_k}{A}
-    \qquad \text{con} \qquad
+    \qquad \text{ossia} \qquad
     \frac{\text{premesse}}{\text{conclusione}}
   \]
 \end{defbox}
 
-Si ha una \textbf{derivazione} di $A$ da un insieme di formule $\Gamma$ con un sistema inferenziale $\mathcal{R}$ ($\Gamma \vdash_{\mathcal{R}} A$) se esiste una successione $A_1, \dots, A_n$ tale che:
+Esiste una \textbf{derivazione} di $A$ da un insieme di formule $\Gamma$ nel sistema $\mathcal{R}$ (si scrive $\Gamma \vdash_{\mathcal{R}} A$) se esiste una successione $A_1, \dots, A_n$ tale che:
 \begin{itemize}
-  \item $A$ è $A_n$;
+  \item $A_n = A$;
   \item per ogni $i \in \{1, \dots, n\}$ vale una delle due condizioni:
   \begin{enumerate}
     \item $A_i \in \Gamma$, oppure
-    \item $A_i$ è una derivazione diretta di formule che la precedono all'interno della stessa successione.
+    \item $A_i$ si ottiene applicando una regola di $\mathcal{R}$ a formule che la precedono nella successione.
   \end{enumerate}
 \end{itemize}
 
-La successione $A_1, \dots, A_n$ è una \textbf{dimostrazione} di $A$, e l'insieme di formule $\Gamma$ viene definito come insieme delle premesse (o assunzioni/ipotesi) per $A$.
+La successione $A_1, \dots, A_n$ si dice \textbf{dimostrazione} di $A$; l'insieme $\Gamma$ è l'insieme delle \emph{premesse} (o ipotesi) di $A$.
 
 \begin{proprietà}{Proprietà dei sistemi di inferenza}
   \begin{itemize}
-    \item Correttezza: le conclusioni sono sempre conseguenze logiche delle premesse $\psi_1,\dots,\psi_n\models\psi$.
-    \item Completezza: se $\text{H}\models\psi$, esiste allora una derivazione di $\psi$ da H.
-    \item Completezza refutazionale: se $\text{H}\cup\{\lnot\psi\}$ è insoddisfacibile, ne si riesce a derivare la contraddizione.
+    \item \textbf{Correttezza}: ogni conclusione è conseguenza logica delle premesse, cioè se $\psi_1,\dots,\psi_n \vdash \psi$ allora $\psi_1,\dots,\psi_n\models\psi$.
+    \item \textbf{Completezza}: se $H\models\psi$, allora esiste una derivazione di $\psi$ da $H$.
+    \item \textbf{Completezza refutazionale}: se $H\cup\{\lnot\psi\}$ è insoddisfacibile, il sistema è in grado di derivarne una contraddizione.
   \end{itemize}
 \end{proprietà}
 
-\subsubsection*{Problema di deduzione}
+\subsection{Problema della deduzione}
 
-  Si vuole dimostrare $\Gamma\models\text{A}$. Si può quindi procedere per refutazione (bisogna dimostrare che $\Gamma\lnot\text{A}$ è insoddisfacibile), o per Forward/Backward chaining, ovvero algoritmi polinomiali (funzionano solo su una classe ristretta di formule, ovvero le clausole di Horn).
+Si vuole stabilire se $\Gamma\models A$. Le strade principali sono due:
+\begin{itemize}
+  \item \textbf{refutazione}: si dimostra che $\Gamma\cup\{\lnot A\}$ è insoddisfacibile (ad esempio con la risoluzione);
+  \item \textbf{forward / backward chaining}: algoritmi di costo polinomiale (anzi lineare), applicabili però soltanto a una classe ristretta di formule, le \emph{clausole di Horn}.
+\end{itemize}
 
-  CNF - Forma Normale Congiuntiva, ovvero una congiunzione ($\wedge$) di clausole, in cui ogni clausole è una disgiunzione ($\vee$) di litterali.
+\begin{defbox}{Forma normale congiuntiva (CNF)}
+  Una formula è in CNF se è una congiunzione ($\land$) di \textbf{clausole}, dove ogni clausola è una disgiunzione ($\lor$) di \textbf{letterali} (simboli o simboli negati):
+  \[
+    (\ell_{1,1} \lor \dots \lor \ell_{1,k}) \land \dots \land (\ell_{m,1} \lor \dots \lor \ell_{m,k})
+  \]
+  Ogni formula della logica proposizionale è convertibile in una formula equivalente in CNF.
+\end{defbox}
 
-  Ogni formula è convetibile in CNF.
+\subsubsection*{Risoluzione}
 
-  \subsubsection*{Risoluzione}
+Se una clausola contiene un letterale $\ell$ e un'altra contiene il suo opposto $\lnot\ell$, si possono eliminare entrambi e unire i letterali rimanenti in una nuova clausola (il \emph{risolvente}):
+\[
+  \frac{\ell_1 \lor \dots \lor \ell_k \lor \ell \qquad m_1 \lor \dots \lor m_n \lor \lnot\ell}
+       {\ell_1 \lor \dots \lor \ell_k \lor m_1 \lor \dots \lor m_n}
+\]
+Applicata a $\KB \land \lnot\alpha$, la risoluzione è \textbf{refutazionalmente completa}: se si genera la clausola vuota (contraddizione), allora $\KB \models \alpha$.
 
-  Se una clausola contiene un litterale $\ell$ e un'altra contiene il suo opposto $\lnot\ell$ li elimino entrambi e unisco il resto in una nuova clausola.
+\begin{codice}{Algoritmo di risoluzione}
+function PL-Resolution(KB, $\alpha$) returns true or false
+  inputs: KB, $\alpha$
+  clauses $\leftarrow$ set of clauses in CNF form of KB $\wedge\lnot\alpha$
+  new $\leftarrow\{\}$
+  loop do
+    for each C$_i$, C$_j$ in clauses do
+      resolvents $\leftarrow$ PL-Resolve(C$_i$, C$_j$)
+      if resolvents contains the empty clause then return true
+      new $\leftarrow$ new $\cup$ resolvents
+    if new $\subseteq$ clauses then return false
+    clauses $\leftarrow$ clauses $\cup$ new
+\end{codice}
 
-  \begin{codice}{Algoritmo di risoluzione}
-    function PL-Resolution(KB,$\alpha$) returns true or false
-      inputs: KB,$\alpha$
-      clauses $\leftarrow$ set of clauses in CNF form of KB$\wedge\lnot\alpha$
-      new $\leftarrow\{\}$
-      loop do
-        for each C$_i$, C$_j$ in clauses do
-          resolvents $\leftarrow$ PL-Resolve(C$_i$,C$_j$)
-          if resolvents contains the empty clause then return true
-          new $\leftarrow$ new $\cup$ resolvents
-        if new $\subseteq$ clauses then return false
-        clauses $\leftarrow$ clauses $\cup$ new
-  \end{codice}
+\subsubsection*{Clausole di Horn e Modus Ponens}
 
-  \subsubsection*{Forward \& Backward chaining}
-  KB = è la congiunzione delle clausole di Horn.
+Nel forward e nel backward chaining la KB è una congiunzione di \textbf{clausole di Horn}, che possono essere di due tipi:
+\begin{itemize}
+  \item un singolo simbolo, cioè un \textbf{fatto} (ad esempio $A$);
+  \item una congiunzione di simboli che implica un simbolo, cioè una \textbf{regola} (ad esempio $C\land D\Rightarrow B$).
+\end{itemize}
 
-  Una clausola di Horn può essere di due tipi:
+Su queste clausole si applica il \textbf{Modus Ponens}:
+\[
+  \frac{\alpha_1,\ \dots,\ \alpha_n \qquad \alpha_1\land\dots\land\alpha_n\Rightarrow\beta}{\beta}
+\]
+Il Modus Ponens è completo per le KB di Horn, e gli algoritmi che ne derivano hanno tempo di esecuzione lineare nella dimensione della KB.
+
+\subsubsection*{Forward chaining}
+
+L'idea è di attivare ogni regola le cui premesse sono tutte già note, aggiungere la sua conclusione alla KB e ripetere finché non si ottiene la query (o finché non si può dedurre nulla di nuovo).
+
+\begin{codice}{Forward chaining}
+function PL-FC-Entails?(KB, q) returns true or false
+  inputs: KB, q
+  local variables: count, a table indexed by clause
+                   inferred, a table indexed by symbol
+                   agenda, a list of symbols
+  while agenda is not empty do
+    p $\leftarrow$ Pop(agenda)
+    unless inferred[p] do
+      inferred[p] $\leftarrow$ true
+      for each Horn clause c in whose premise p appears do
+        decrement count[c]
+        if count[c] = 0 then do
+          if Head[c] = q then return true
+          Push(Head[c], agenda)
+  return false
+\end{codice}
+
+\textbf{Completezza.} Il forward chaining deriva ogni simbolo atomico implicato dalla KB. Infatti:
+\begin{enumerate}
+  \item l'algoritmo termina in un \emph{punto fisso}, in cui non è più possibile dedurre nulla di nuovo;
+  \item si consideri lo stato finale come un modello $m$: vero per i simboli dedotti, falso per tutti gli altri;
+  \item ogni clausola della KB è vera in $m$: se una regola $a_1\land\dots\land a_k\Rightarrow b$ fosse falsa in $m$, le premesse sarebbero tutte vere e $b$ falso; ma allora l'algoritmo potrebbe ancora dedurre $b$, contro l'ipotesi di punto fisso (contraddizione);
+  \item dunque $m$ è un modello della KB; se $\KB\models a$, allora $a$ è vero in ogni modello della KB, in particolare in $m$, e quindi è stato dedotto.
+\end{enumerate}
+
+\subsubsection*{Backward chaining}
+
+Si lavora all'indietro a partire dalla query $q$: se $q$ è già nota non c'è nulla da fare; altrimenti si cerca una regola che abbia $q$ come conclusione e si tenta di dimostrare ricorsivamente tutte le sue premesse.
+
+Accorgimenti fondamentali:
+\begin{itemize}
+  \item \textbf{evitare i cicli}: controllare se un nuovo sotto-obiettivo è già presente nella pila degli obiettivi;
+  \item \textbf{evitare il lavoro ripetuto}: ricordare quali sotto-obiettivi sono già stati dimostrati e quali sono falliti.
+\end{itemize}
+
+\subsubsection*{Confronto}
+
+\begin{center}
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{>{\bfseries}l p{5.6cm} p{5.6cm}}
+    \toprule
+     & \intest{Forward chaining} & \intest{Backward chaining} \\
+    \midrule
+    Guidato da & i dati & l'obiettivo (la query) \\
+    Lavoro & deduce tutto, anche ciò che è irrilevante per la query & esplora solo ciò che è rilevante \\
+    Costo & lineare nella dimensione della KB & spesso molto inferiore al lineare \\
+    Adatto a & percezione, riconoscimento & problem solving, domande \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\clearpage
+% =====================================================================
+\section{Rappresentare l'incertezza}
+% =====================================================================
+
+\subsection{Il problema dell'incertezza}
+
+Un agente reale raramente dispone di informazioni certe. Le cause principali sono quattro:
+\begin{enumerate}
+  \item \textbf{osservabilità parziale}: l'agente non vede tutto lo stato del mondo;
+  \item \textbf{sensori rumorosi}: anche ciò che vede può essere misurato in modo impreciso;
+  \item \textbf{esiti incerti delle azioni}: un'azione può non produrre l'effetto atteso;
+  \item \textbf{complessità}: modellare e prevedere il mondo in ogni dettaglio è impraticabile.
+\end{enumerate}
+
+Di fronte a questi problemi, un approccio \textbf{puramente logico} fallisce in uno di due modi:
+\begin{itemize}
+  \item o \textbf{afferma il falso}, trattando come certa una conclusione che non lo è;
+  \item oppure produce conclusioni talmente piene di condizioni (``\dots{} a meno che \dots{} e a meno che \dots'') da risultare \textbf{troppo deboli} per prendere una decisione.
+\end{itemize}
+
+\subsubsection*{Metodi per gestire l'incertezza}
+
+\begin{tcbraster}[raster columns=3, raster equal height, raster column skip=10pt, raster before skip=8pt, raster after skip=10pt]
+  \begin{defbox}{Logica di default}
+    \raggedright
+    (Logica non monotona.) Si assume che le cose vadano ``normalmente'' finché un'evidenza non lo contraddice.
+    \textbf{Problemi}: quali assunzioni sono ragionevoli? Come si gestiscono le contraddizioni?
+  \end{defbox}
+  \begin{defbox}{Logica fuzzy}
+    \raggedright
+    Rappresenta \textbf{gradi di verità} (una frase è ``vera al 20\%''), \textbf{non} l'incertezza: è un concetto diverso.
+  \end{defbox}
+  \begin{defbox}{Probabilità}
+    \raggedright
+    Date le evidenze disponibili, a una proposizione si associa un \textbf{grado di credenza} numerico compreso tra 0 e 1.
+  \end{defbox}
+\end{tcbraster}
+
+\subsection{La probabilità come grado di credenza}
+
+Le asserzioni probabilistiche \emph{riassumono} due tipi di limite:
+\begin{itemize}
+  \item \textbf{pigrizia}: non si vogliono (o non si possono) elencare tutte le eccezioni e le condizioni;
+  \item \textbf{ignoranza}: mancano fatti rilevanti, condizioni iniziali, conoscenza teorica.
+\end{itemize}
+
+Si adotta la visione \textbf{soggettiva} o \textbf{bayesiana}: la probabilità mette in relazione una proposizione con lo \emph{stato di conoscenza} dell'agente. Ne seguono due osservazioni importanti:
+\begin{itemize}
+  \item la probabilità esprime un \textbf{grado di credenza}, non un grado di verità: il fatto in sé è vero o falso, è l'agente a non saperlo;
+  \item la probabilità di una proposizione \textbf{cambia con nuove evidenze}, perché cambia ciò che l'agente sa.
+\end{itemize}
+
+È un'analogia precisa con la logica: dire ``$P(\alpha \mid \text{evidenza}) = p$'' è simile a dire $\KB \models \alpha$, cioè descrive il rapporto tra $\alpha$ e ciò che si sa, non la verità di $\alpha$ nel mondo.
+
+\subsection{Decidere in condizioni di incertezza}
+
+La sola probabilità non basta per scegliere un'azione: occorre anche sapere quanto l'agente \emph{preferisce} ciascun esito. Le preferenze si rappresentano con la \textbf{teoria dell'utilità}, che assegna a ogni esito un valore numerico $U$.
+
+\begin{chiave}{Teoria delle decisioni e principio MEU}
+  \[
+    \text{Teoria delle decisioni} \;=\; \text{teoria dell'utilità} \;+\; \text{teoria della probabilità}
+  \]
+  \textbf{Principio della massima utilità attesa (MEU)}: un agente razionale sceglie l'azione con l'utilità attesa più alta, cioè la media delle utilità degli esiti pesata sulle loro probabilità:
+  \[
+    a^* = \arg\max_{a} \; \sum_{s} P(s \mid a)\, U(s)
+  \]
+\end{chiave}
+
+\subsection{Fondamenti di probabilità}
+
+\begin{defbox}{Spazio campionario e modello probabilistico}
   \begin{itemize}
-    \item un simbolo singolo, ovvero un fatto (A);
-    \item una congiunzione di simboli che implica un simbolo $(\text{C}\wedge\text{D}\Rightarrow\text{B})$
+    \item Lo \textbf{spazio campionario} $\Omega$ è l'insieme di tutti i possibili esiti.
+    \item Ogni $\omega \in \Omega$ è un \textbf{punto campionario} (o \emph{mondo possibile}, o \emph{evento atomico}).
+    \item Un \textbf{modello probabilistico} è uno spazio campionario con un'assegnazione $P(\omega)$ per ogni $\omega$ tale che
+    \[
+      0 \le P(\omega) \le 1 \qquad\text{e}\qquad \sum_{\omega\in\Omega} P(\omega) = 1 .
+    \]
   \end{itemize}
-  Su queste clausole si utilizza la regola del \textbf{Modus Ponens} (completa con le clausole di Horn, e gli algoritmi che ne derivano impiegano un tempo di esecuzione lineare): se esistono $\alpha_1,\dots,\alpha_n$ e $\alpha_1\wedge\dots\wedge\alpha_n\Rightarrow\beta$, allora è possibile dedurre $\beta$.
+\end{defbox}
 
-  Si vuole quindi attivare ogni regola le cui premesse sono già note, aggiungere le conclusioni alla coda della KB e ripetere fino alla risoluzione della query.
+Un \textbf{evento} $A$ è un qualsiasi sottoinsieme di $\Omega$; la sua probabilità è la somma delle probabilità dei punti che contiene:
+\[
+  P(A) = \sum_{\omega \in A} P(\omega)
+\]
 
-  \begin{codice}{Forward Chanining Algorithm}
-    function PL-FC-Entails? (KB,q) returns true or false
-      inputs: KB, q
-      local variables: count, a table indexed by clause
-                       inferred, a table indexed by symbol
-                       agenda, a list of symbols
-      while agenda is not empty do
-        p $\leftarrow$ Pop(agenda)
-        unless inferred[p] do
-          inferred[p] $\leftarrow$ true
-          for each Horn Clause c in whose premise p appears do
-            decrement count[c]
-            if count[c] = 0 then do
-              if Head[c] = q then return true
-              Push(Head[c], agenda)
-      return false
-  \end{codice}
+\subsubsection*{Variabili aleatorie}
 
-  \subsubsection*{Completezza del Forward Chaining}
+Una \textbf{variabile aleatoria} (VA) è una variabile il cui valore dipende dal caso: l'agente non può sceglierlo, può solo averne una credenza. Ogni VA ha un \textbf{dominio}, cioè l'insieme dei valori che può assumere.
 
-  La Forward Chaining deriva ogni fatto (simbolo singolo) atomico implicato dalla Keyword Base (KB).
+La probabilità sui punti campionari \emph{induce} una distribuzione su ogni VA $X$: la probabilità che $X$ assuma il valore $x_i$ è la somma dei punti in cui ciò accade:
+\[
+  P(X = x_i) = \sum_{\omega \,:\, X(\omega) = x_i} P(\omega)
+\]
 
-  L'algoritmo si ferma in un punto fisso, in cui non deduce nulla di nuovo e considera lo stato finale come un modello $m$, ovvero vero per ciò che è stato dedotto e falso per tutto il resto.
+\subsubsection*{Proposizioni come eventi}
 
-  Ogni clausola della KB è vera in $m$, infatti se una regola in una successione $\text{a}_1\dots\text{a}_\text{k}\Rightarrow\text{b}$ fosse falsa, le premesse sarebbero tutte vere e b falso, ma così l'algoritmo avrebbe ancora qualcosa da dedurre e non ci sarebbe un punto di arrivo fisso (contraddizione).
+Una \textbf{proposizione} si interpreta come l'evento (l'insieme dei punti campionari) in cui essa è vera. Date due VA booleane $A$ e $B$:
+\begin{itemize}
+  \item l'evento $a$ è l'insieme dei punti in cui $A(\omega) = \text{true}$;
+  \item l'evento $\lnot a$ è l'insieme dei punti in cui $A(\omega) = \text{false}$;
+  \item l'evento $a \land b$ è l'insieme dei punti in cui $A$ e $B$ sono entrambe vere.
+\end{itemize}
 
-  $\Rightarrow$ quindi $m$ è un modello della KB, e se $\text{KB}\models\text{a}$, allora a è vero in ogni modello della KB, compreso $m$.
+Con variabili booleane, \textbf{un punto campionario coincide con un modello della logica proposizionale}. Di conseguenza ogni proposizione equivale alla disgiunzione degli eventi atomici in cui è vera, e la sua probabilità è la somma delle loro probabilità:
+\[
+  (a \lor b) \equiv (\lnot a \land b) \lor (a \land \lnot b) \lor (a \land b)
+  \;\Longrightarrow\;
+  P(a \lor b) = P(\lnot a \land b) + P(a \land \lnot b) + P(a \land b)
+\]
 
-  \subsubsection*{Backward Chaining}
+\subsubsection*{Perché proprio la probabilità?}
 
-  L'idea è quella di lavorare all'indietro partendo dalla query q, altrimenti (qualora non funzioni o diventi troppo complesso) si cerca di trovare una regola che possa concludere q e provi a dimostrare ricorsivamente tutte le sue premesse.
+Le definizioni impongono che eventi \emph{logicamente collegati} abbiano probabilità \emph{coerenti}; ad esempio:
+\[
+  P(a \lor b) = P(a) + P(b) - P(a \land b)
+\]
 
-  È una buona pratica evitare i cicli (controllare sempre se un subgoal è già nello stack di goal) e il lavoro ripetuto (ricordare quali subgoal sono stati approvati e dimostrati e quali sono invece falliti).
+\begin{chiave}{Argomento di de Finetti (1931)}
+  Un agente che scommette secondo credenze che \textbf{violano} gli assiomi della probabilità può essere costretto a una serie di scommesse in cui \textbf{perde denaro qualunque sia l'esito}. Gli assiomi sono quindi le uniche regole razionali per gestire credenze incerte.
+\end{chiave}
 
-  \subsubsection*{Confronto tra backward e forward chaining}
+\subsection{Sintassi delle proposizioni}
 
-  Il forward chaining è manovrato dai dati, richiede spesso tanto lavoro inutile perchè deduce tutto, anche se inutile per la query.
+Le proposizioni di base sono le variabili aleatorie; le proposizioni complesse sono combinazioni booleane arbitrarie di VA. Si distinguono tre tipi di VA:
 
-  Il backward chaining invece è più adatto al problem solving perchè guidato dall'obiettivo. Esplora solo ciò che è rilevante, quindi il suo costo può essere molto minore di un costo lineare nella dimensione della KB.
+\begin{center}
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{>{\bfseries}l p{10.6cm}}
+    \toprule
+    \intest{Tipo} & \intest{Caratteristiche} \\
+    \midrule
+    Booleana & dominio $\{\text{true}, \text{false}\}$; la proposizione $X = \text{true}$ si scrive in breve $x$ (minuscolo) \\
+    Discreta & dominio finito o infinito numerabile; i valori devono essere \textbf{esaustivi} e \textbf{mutuamente esclusivi} \\
+    Continua & valori reali, limitati o illimitati; si ammettono anche proposizioni come $X < 22{,}0$ \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\subsubsection*{Eventi atomici}
+
+Un \textbf{evento atomico} è un'assegnazione di valori a \emph{tutte} le variabili del dominio. Gli eventi atomici sono l'analogo probabilistico dei modelli della logica.
+
+\begin{proprietà}{Proprietà degli eventi atomici}
+  \begin{enumerate}
+    \item sono \textbf{mutuamente esclusivi}: due eventi atomici diversi non possono essere veri contemporaneamente;
+    \item sono \textbf{esaustivi}: la disgiunzione di tutti gli eventi atomici è sempre vera;
+    \item ogni evento atomico \textbf{determina la verità di ogni proposizione} (con la semantica standard dei connettivi);
+    \item ogni proposizione è logicamente equivalente alla \textbf{disgiunzione degli eventi atomici} in cui è vera.
+  \end{enumerate}
+\end{proprietà}
+
+\subsection{Probabilità a priori e distribuzione congiunta}
+
+\begin{defbox}{Probabilità a priori}
+  La probabilità \textbf{a priori} (o incondizionata) $P(a)$ è la credenza in $a$ \textbf{prima} dell'arrivo di qualsiasi nuova evidenza. Svolge il ruolo dei \emph{fatti} in una KB.
+
+  La \textbf{distribuzione di probabilità} $\Pv(X)$ (in grassetto) elenca le probabilità di tutti i valori di $X$, ed è \emph{normalizzata}: la somma vale 1. Ad esempio, per una VA con quattro valori, $\Pv(X) = \tup{0.72,\, 0.1,\, 0.08,\, 0.1}$.
+\end{defbox}
+
+\begin{defbox}{Distribuzione congiunta}
+  La \textbf{distribuzione di probabilità congiunta} di un insieme di VA assegna una probabilità a \textbf{ogni evento atomico} su quelle variabili. Per due VA con 4 e 2 valori, $\Pv(X, Y)$ è una tabella $4 \times 2$.
+\end{defbox}
+
+\begin{chiave}{Potere della congiunta completa}
+  La distribuzione congiunta \textbf{completa} (su tutte le variabili del dominio) permette di rispondere a \textbf{qualsiasi domanda} sul dominio, perché ogni evento è una somma di punti campionari.
+\end{chiave}
+
+\subsubsection*{Variabili continue}
+
+Per una VA continua non si elencano i valori (sono infiniti), ma si esprime la distribuzione come una \textbf{funzione parametrica} del valore: una \textbf{densità di probabilità}, il cui integrale su tutto il dominio vale 1.
+
+\begin{itemize}
+  \item \textbf{Densità uniforme} $U[a,b](x)$: costante e pari a $\frac{1}{b-a}$ su $[a,b]$, nulla altrove.
+  \item Il valore della densità in un punto \textbf{non è una probabilità} (la probabilità di un singolo punto è zero), ma un limite:
+  \[
+    P(X = x) \;\text{ significa }\; \lim_{dx\to 0} \frac{P(x \le X \le x + dx)}{dx}
+  \]
+\end{itemize}
+
+\begin{defbox}{Densità gaussiana}
+  \[
+    P(x) = \frac{1}{\sqrt{2\pi}\,\sigma}\; e^{-(x-\mu)^2 / 2\sigma^2}
+  \]
+  con media $\mu$ e deviazione standard $\sigma$. L'area sotto la curva:
+  \begin{itemize}
+    \item tra $\mu-\sigma$ e $\mu+\sigma$ è circa il $68{,}2\%$;
+    \item tra $\mu-2\sigma$ e $\mu+2\sigma$ è circa il $95{,}4\%$;
+    \item tra $\mu-3\sigma$ e $\mu+3\sigma$ è circa il $99{,}7\%$.
+  \end{itemize}
+\end{defbox}
+
+\subsection{Probabilità condizionata}
+
+La probabilità \textbf{condizionata} (o a posteriori) $P(a \mid b)$ è la credenza in $a$ \textbf{sapendo che $b$ è tutto ciò che si conosce}.
+
+\textbf{Attenzione}: $P(a \mid b) = 0.6$ \emph{non} significa ``se $b$, allora $a$ con probabilità 60\%''. Non è una regola che vale sempre quando $b$ è vera: vale solo quando $b$ è \emph{l'unica} informazione disponibile.
+
+Alcune conseguenze:
+\begin{itemize}
+  \item se si viene a sapere di più (ad esempio che anche $a$ è vera), la credenza cambia: $P(a \mid b, a) = 1$;
+  \item la credenza meno specifica \emph{resta valida} dopo nuove evidenze, ma può non essere più utile;
+  \item una nuova evidenza può essere \textbf{irrilevante}, e allora la si può ignorare: $P(a \mid b, c) = P(a \mid b)$. Questo tipo di semplificazione, giustificata dalla conoscenza del dominio, è \textbf{cruciale} per rendere l'inferenza trattabile.
+\end{itemize}
+
+Notazione: $\Pv(X \mid Y)$ indica l'insieme delle distribuzioni di $X$, una per ogni valore di $Y$.
+
+\begin{chiave}{Definizione, regola del prodotto, regola della catena}
+  \textbf{Definizione}:
+  \[
+    P(a \mid b) = \frac{P(a \land b)}{P(b)} \qquad \text{se } P(b) \neq 0
+  \]
+  \textbf{Regola del prodotto} (la stessa cosa, scritta diversamente):
+  \[
+    P(a \land b) = P(a \mid b)\,P(b) = P(b \mid a)\,P(a)
+  \]
+  \textbf{Regola della catena} (applicazione ripetuta della regola del prodotto):
+  \[
+    \Pv(X_1, \dots, X_n) = \Pv(X_1, \dots, X_{n-1})\,\Pv(X_n \mid X_1, \dots, X_{n-1})
+    = \dots = \prod_{i=1}^{n} \Pv(X_i \mid X_1, \dots, X_{i-1})
+  \]
+\end{chiave}
+
+La regola del prodotto vale anche per intere distribuzioni: $\Pv(X, Y) = \Pv(X \mid Y)\,\Pv(Y)$ va letta come un \emph{insieme di equazioni}, una per ogni coppia di valori, e non come un prodotto di matrici.
+
+\subsection{Inferenza per enumerazione}
+
+L'inferenza probabilistica consiste nel calcolare probabilità a posteriori a partire dalle evidenze osservate. Il metodo più diretto parte dalla distribuzione congiunta completa.
+
+\textbf{Probabilità di una proposizione.} Per ogni proposizione $\varphi$ si sommano gli eventi atomici in cui è vera:
+\[
+  P(\varphi) = \sum_{\omega \,:\, \omega \models \varphi} P(\omega)
+\]
+Il procedimento è corretto perché ogni proposizione equivale alla disgiunzione degli eventi atomici in cui vale, e questi sono mutuamente esclusivi (quindi non ci sono sovrapposizioni da contare due volte).
+
+\textbf{Probabilità condizionate.} Si applica la definizione, calcolando numeratore e denominatore come somme di eventi atomici:
+\[
+  P(a \mid b) = \frac{P(a \land b)}{P(b)}
+\]
+
+\subsubsection*{Normalizzazione}
+
+Il denominatore $P(b)$ è lo stesso per tutti i valori della variabile di interrogazione: lo si può quindi trattare come una \textbf{costante di normalizzazione} $\alpha = 1/P(b)$. Si calcolano i valori \emph{non normalizzati} e poi li si scala in modo che sommino a 1:
+\[
+  \Pv(X \mid b) = \alpha\, \Pv(X, b)
+\]
+Ad esempio, se si ottiene $\alpha\tup{0.12,\, 0.08}$, normalizzando si ha $\tup{0.6,\, 0.4}$. Il vantaggio è che non serve calcolare $P(b)$ esplicitamente.
+
+\subsubsection*{Formula generale}
+
+Si suddividono tutte le variabili $\mathbf{X}$ in tre gruppi:
+\begin{itemize}
+  \item $\mathbf{Y}$: variabili di \textbf{interrogazione} (ciò che si vuole sapere);
+  \item $\mathbf{E}$: variabili di \textbf{evidenza}, con valori osservati $\mathbf{e}$;
+  \item $\mathbf{H} = \mathbf{X} - \mathbf{Y} - \mathbf{E}$: variabili \textbf{nascoste} (né chieste né osservate).
+\end{itemize}
+
+\begin{chiave}{Inferenza per enumerazione}
+  \[
+    \Pv(\mathbf{Y} \mid \mathbf{E} = \mathbf{e})
+    = \alpha\, \Pv(\mathbf{Y}, \mathbf{E} = \mathbf{e})
+    = \alpha \sum_{\mathbf{h}} \Pv(\mathbf{Y}, \mathbf{E} = \mathbf{e}, \mathbf{H} = \mathbf{h})
+  \]
+  Si fissano le evidenze e si \textbf{sommano via} (marginalizzano) le variabili nascoste. I termini della somma sono voci della congiunta, perché $\mathbf{Y}$, $\mathbf{E}$ e $\mathbf{H}$ insieme esauriscono tutte le variabili.
+\end{chiave}
+
+\textbf{Limiti evidenti}, con $n$ variabili e $d$ valori al massimo per variabile:
+\begin{enumerate}
+  \item complessità temporale nel caso peggiore $O(d^n)$;
+  \item complessità spaziale $O(d^n)$ per memorizzare la congiunta;
+  \item soprattutto: \textbf{da dove si ricavano} $O(d^n)$ numeri?
+\end{enumerate}
+La soluzione è sfruttare la struttura del dominio, cioè le \emph{indipendenze}.
+
+\subsection{Indipendenza}
+
+\begin{defbox}{Indipendenza (assoluta)}
+  $A$ e $B$ sono \textbf{indipendenti} se e solo se vale una delle seguenti condizioni (equivalenti):
+  \[
+    \Pv(A \mid B) = \Pv(A) \qquad \Pv(B \mid A) = \Pv(B) \qquad \Pv(A, B) = \Pv(A)\,\Pv(B)
+  \]
+  Intuitivamente: sapere qualcosa su $B$ non cambia la credenza su $A$.
+\end{defbox}
+
+L'indipendenza permette di \textbf{fattorizzare} la congiunta in tabelle più piccole. Se un gruppo di 3 variabili booleane è indipendente da una variabile con 4 valori, la congiunta passa da $2^3 \cdot 4 = 32$ voci a $2^3 + 4 = 12$. Per $n$ variabili booleane tutte indipendenti si passa da $2^n$ a $n$ numeri.
+
+Tuttavia l'indipendenza assoluta è \textbf{potente ma rara}: nei domini reali le variabili sono quasi sempre collegate tra loro in qualche modo.
+
+\subsection{Indipendenza condizionata}
+
+Spesso due variabili non sono indipendenti in assoluto, ma lo diventano \textbf{una volta nota la loro causa comune}. Se due effetti dipendono entrambi da una stessa causa, una volta conosciuta la causa sapere un effetto non dice nulla di nuovo sull'altro.
+
+\begin{chiave}{Indipendenza condizionata}
+  $X$ è \textbf{condizionatamente indipendente} da $Y$ dato $Z$ se:
+  \[
+    \Pv(X \mid Y, Z) = \Pv(X \mid Z)
+  \]
+  Formulazioni equivalenti:
+  \[
+    \Pv(Y \mid X, Z) = \Pv(Y \mid Z)
+    \qquad\qquad
+    \Pv(X, Y \mid Z) = \Pv(X \mid Z)\,\Pv(Y \mid Z)
+  \]
+\end{chiave}
+
+\textbf{Effetto sulla rappresentazione.} Con tre variabili booleane (una causa $C$ e due effetti $E_1, E_2$), la congiunta ha $2^3 - 1 = 7$ numeri indipendenti (l'ottavo si ricava perché la somma vale 1). Applicando la regola della catena e poi l'indipendenza condizionata:
+\begin{align*}
+  \Pv(E_1, E_2, C)
+  &= \Pv(E_1 \mid E_2, C)\,\Pv(E_2, C) \\
+  &= \Pv(E_1 \mid E_2, C)\,\Pv(E_2 \mid C)\,\Pv(C) \\
+  &= \Pv(E_1 \mid C)\,\Pv(E_2 \mid C)\,\Pv(C)
+\end{align*}
+Servono ora $2 + 2 + 1 = 5$ numeri invece di 7.
+
+In generale l'indipendenza condizionata riduce la dimensione della rappresentazione della congiunta da \textbf{esponenziale} in $n$ a \textbf{lineare} in $n$. È la forma di conoscenza più basilare e robusta sugli ambienti incerti.
+
+\subsection{Regola di Bayes}
+
+Dalla regola del prodotto, $P(a \land b) = P(a \mid b)P(b) = P(b \mid a)P(a)$; uguagliando i due membri e dividendo per $P(b)$ si ottiene:
+
+\begin{chiave}{Regola di Bayes}
+  \[
+    P(a \mid b) = \frac{P(b \mid a)\,P(a)}{P(b)}
+    \qquad\qquad
+    \Pv(Y \mid X) = \frac{\Pv(X \mid Y)\,\Pv(Y)}{\Pv(X)} = \alpha\, \Pv(X \mid Y)\,\Pv(Y)
+  \]
+\end{chiave}
+
+\textbf{Perché è utile.} Nella pratica si conosce più facilmente la probabilità \emph{causale} (quanto spesso una causa produce un effetto), mentre serve quella \emph{diagnostica} (quanto è probabile la causa, visto l'effetto). La regola di Bayes permette di passare dall'una all'altra:
+\[
+  P(\mathit{Causa} \mid \mathit{Effetto}) = \frac{P(\mathit{Effetto} \mid \mathit{Causa})\,P(\mathit{Causa})}{P(\mathit{Effetto})}
+\]
+Si noti il ruolo della probabilità a priori $P(\mathit{Causa})$: se la causa è molto rara, la probabilità a posteriori può restare piccola anche quando l'effetto è fortemente associato alla causa.
+
+\subsubsection*{Bayes e indipendenza condizionata: il modello naive Bayes}
+
+Combinando la regola di Bayes con l'indipendenza condizionata degli effetti data la causa:
+\[
+  \Pv(C \mid e_1 \land e_2) = \alpha\, \Pv(e_1 \land e_2 \mid C)\,\Pv(C) = \alpha\, \Pv(e_1 \mid C)\,\Pv(e_2 \mid C)\,\Pv(C)
+\]
+
+\begin{defbox}{Modello naive Bayes}
+  Una causa influenza direttamente più effetti, che sono condizionatamente indipendenti tra loro data la causa:
+  \[
+    \Pv(\mathit{Causa}, \mathit{Effetto}_1, \dots, \mathit{Effetto}_n) = \Pv(\mathit{Causa}) \prod_{i} \Pv(\mathit{Effetto}_i \mid \mathit{Causa})
+  \]
+  Il numero di parametri cresce \textbf{linearmente} con il numero di effetti. Si dice ``naive'' perché spesso viene usato anche quando l'indipendenza non è del tutto verificata, ottenendo comunque buoni risultati.
+\end{defbox}
+
+\clearpage
+\subsection{Il mondo del Wumpus con l'incertezza}
+
+Il Wumpus è l'esempio che unisce tutti gli strumenti visti: mostra dove la logica si blocca e come la probabilità, insieme all'indipendenza condizionata, permette comunque di decidere.
+
+\subsubsection*{Descrizione PEAS}
+
+\begin{center}
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{>{\bfseries}l p{11.2cm}}
+    \toprule
+    \intest{Componente} & \intest{Descrizione} \\
+    \midrule
+    Prestazione & oro $+1000$, morte $-1000$; $-1$ per ogni passo, $-10$ per l'uso della freccia \\
+    Ambiente & griglia $4\times4$. Le caselle adiacenti al Wumpus hanno \emph{puzza}; quelle adiacenti a un pozzo hanno \emph{brezza}; c'è \emph{luccichio} se e solo se l'oro è nella stessa casella. Sparare uccide il Wumpus se l'agente lo ha di fronte; c'è una sola freccia. \emph{Grab} raccoglie l'oro nella stessa casella, \emph{Release} lo lascia \\
+    Attuatori & gira a sinistra, gira a destra, avanti, \emph{Grab}, \emph{Release}, \emph{Shoot} \\
+    Sensori & brezza, luccichio, puzza \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\subsubsection*{Una situazione senza via d'uscita logica}
+
+L'agente ha visitato $[1,1]$, $[1,2]$ e $[2,1]$: nessuna contiene un pozzo (è ancora vivo), in $[1,1]$ non c'è brezza, mentre c'è brezza sia in $[1,2]$ sia in $[2,1]$.
+
+Le caselle di frontiera sono $[1,3]$, $[2,2]$ e $[3,1]$. La logica dice soltanto che c'è un pozzo in $[1,3]$ o in $[2,2]$ (per la brezza in $[1,2]$) e un pozzo in $[2,2]$ o in $[3,1]$ (per la brezza in $[2,1]$). \textbf{Nessuna casella è dimostrabilmente sicura}: un agente puramente logico non ha azioni sicure e non sa scegliere.
+
+Eppure le caselle non sono tutte equivalenti: il calcolo che segue mostra che, con pozzi distribuiti uniformemente, $[2,2]$ contiene un pozzo con probabilità $\approx 0.86$, mentre $[1,3]$ e $[3,1]$ solo con probabilità $\approx 0.31$. L'agente razionale (MEU) andrà quindi in $[1,3]$ o in $[3,1]$.
+
+\subsubsection*{Variabili del modello}
+
+\begin{itemize}
+  \item $P_{i,j} = \text{true}$ se e solo se la casella $[i,j]$ contiene un pozzo (16 variabili);
+  \item $B_{i,j} = \text{true}$ se e solo se la casella $[i,j]$ ha brezza; nel modello si includono soltanto quelle osservate, $B_{1,1}$, $B_{1,2}$, $B_{2,1}$.
+\end{itemize}
+
+\subsubsection*{Specifica del modello probabilistico}
+
+La congiunta completa è $\Pv(P_{1,1}, \dots, P_{4,4}, B_{1,1}, B_{1,2}, B_{2,1})$. Invece di assegnarla direttamente, la si scompone con la regola del prodotto, in modo da ottenere la forma $P(\mathit{Effetto} \mid \mathit{Causa})$, che è facile da specificare:
+\[
+  \Pv(B_{1,1}, B_{1,2}, B_{2,1} \mid P_{1,1}, \dots, P_{4,4})\;\Pv(P_{1,1}, \dots, P_{4,4})
+\]
+
+\begin{itemize}
+  \item \textbf{Primo fattore} (effetto dato la causa): è \textbf{deterministico}. Vale 1 se le brezze sono coerenti con i pozzi (c'è brezza esattamente nelle caselle adiacenti a qualche pozzo), 0 altrimenti.
+  \item \textbf{Secondo fattore} (a priori sui pozzi): ogni casella contiene un pozzo con probabilità $0.2$, \textbf{indipendentemente} dalle altre. Per una configurazione con $n$ pozzi:
+  \[
+    \Pv(P_{1,1}, \dots, P_{4,4}) = \prod_{i,j=1,1}^{4,4} P(P_{i,j}) = 0.2^{\,n} \times 0.8^{\,16-n}
+  \]
+\end{itemize}
+
+\subsubsection*{Osservazioni e interrogazione}
+
+I fatti noti sono:
+\[
+  b = \lnot b_{1,1} \land b_{1,2} \land b_{2,1}
+  \qquad\qquad
+  \known = \lnot p_{1,1} \land \lnot p_{1,2} \land \lnot p_{2,1}
+\]
+L'interrogazione è $\Pv(P_{1,3} \mid \known, b)$. Si chiamano $\mathit{Unknown}$ tutte le variabili $P_{i,j}$ diverse da $P_{1,3}$ e da quelle in $\mathit{Known}$ (sono 12). Per enumerazione:
+\[
+  \Pv(P_{1,3} \mid \known, b) = \alpha \sum_{\unknown} \Pv(P_{1,3}, \unknown, \known, b)
+\]
+Il problema è che la somma ha $2^{12} = 4096$ termini: \textbf{cresce esponenzialmente con il numero di caselle}.
+
+\subsubsection*{L'idea chiave: indipendenza condizionata}
+
+Le brezze osservate dipendono \emph{soltanto} dalle caselle vicine. Si divide perciò $\mathit{Unknown}$ in due parti:
+\begin{itemize}
+  \item $\mathit{Fringe}$ (frontiera): le caselle sconosciute adiacenti a quelle visitate, escluse quella interrogata; qui $\{P_{2,2}, P_{3,1}\}$;
+  \item $\mathit{Other}$: tutte le altre caselle sconosciute (10 variabili).
+\end{itemize}
+
+\begin{chiave}{Ipotesi di indipendenza condizionata}
+  Le osservazioni sono condizionatamente indipendenti dalle caselle lontane, date le caselle vicine:
+  \[
+    \Pv(b \mid P_{1,3}, \mathit{Known}, \mathit{Unknown}) = \Pv(b \mid P_{1,3}, \mathit{Known}, \mathit{Fringe})
+  \]
+\end{chiave}
+
+\subsubsection*{La derivazione passo per passo}
+
+Si manipola l'interrogazione fino a poter sfruttare questa ipotesi. Ogni passaggio è numerato e giustificato sotto.
+{\small
+\begin{align}
+  \Pv(P_{1,3} \mid \known, b)
+  &= \alpha \sum_{\unknown} \Pv(P_{1,3}, \unknown, \known, b) \\
+  &= \alpha \sum_{\unknown} \Pv(b \mid P_{1,3}, \known, \unknown)\, \Pv(P_{1,3}, \known, \unknown) \\
+  &= \alpha \sum_{\fringe} \sum_{\other} \Pv(b \mid \known, P_{1,3}, \fringe, \other)\, \Pv(P_{1,3}, \known, \fringe, \other) \\
+  &= \alpha \sum_{\fringe} \sum_{\other} \Pv(b \mid \known, P_{1,3}, \fringe)\, \Pv(P_{1,3}, \known, \fringe, \other) \\
+  &= \alpha \sum_{\fringe} \Pv(b \mid \known, P_{1,3}, \fringe) \sum_{\other} \Pv(P_{1,3}, \known, \fringe, \other) \\
+  &= \alpha \sum_{\fringe} \Pv(b \mid \known, P_{1,3}, \fringe) \sum_{\other} \Pv(P_{1,3})\,P(\known)\,P(\fringe)\,P(\other) \\
+  &= \alpha\, P(\known)\,\Pv(P_{1,3}) \sum_{\fringe} \Pv(b \mid \known, P_{1,3}, \fringe)\,P(\fringe) \sum_{\other} P(\other) \\
+  &= \alpha'\, \Pv(P_{1,3}) \sum_{\fringe} \Pv(b \mid \known, P_{1,3}, \fringe)\,P(\fringe)
+\end{align}
+}
+
+\begin{enumerate}
+  \item \textbf{enumerazione}: si sommano via le variabili nascoste;
+  \item \textbf{regola del prodotto}, per isolare il termine $P(\mathit{Effetto} \mid \mathit{Causa})$;
+  \item si scompone $\mathit{Unknown} = \mathit{Fringe} \cup \mathit{Other}$ in due somme;
+  \item \textbf{indipendenza condizionata}: $b$ non dipende da $\mathit{Other}$, data la frontiera;
+  \item il primo fattore non dipende da $\other$ e si porta fuori dalla somma interna;
+  \item i pozzi sono \textbf{indipendenti} tra loro, quindi la loro a priori si fattorizza;
+  \item si raccolgono fuori dalle somme i fattori che non dipendono dagli indici di somma;
+  \item $\sum_{\other} P(\other) = 1$ e $P(\known)$ viene assorbito in $\alpha' = \alpha\,P(\known)$.
+\end{enumerate}
+
+Negli ultimi due passaggi accadono due cose:
+\begin{itemize}
+  \item $\sum_{\other} P(\other) = 1$, perché è la somma di una distribuzione su tutti i suoi valori: le 10 caselle lontane \textbf{spariscono} dal calcolo;
+  \item $P(\known)$ è una costante (non dipende da $P_{1,3}$), quindi viene assorbita nella nuova costante di normalizzazione $\alpha' = \alpha\,P(\known)$.
+\end{itemize}
+
+Il risultato è che la somma corre soltanto sulle $2^2 = 4$ configurazioni della frontiera, non più su $2^{12}$.
+
+\subsubsection*{Il calcolo numerico}
+
+Il fattore $\Pv(b \mid \known, P_{1,3}, \fringe)$ vale 1 per le configurazioni coerenti con le brezze osservate e 0 per le altre. Basta quindi sommare $P(\fringe)$ sulle configurazioni \textbf{coerenti}; ogni casella di frontiera contribuisce con $0.2$ se ha un pozzo e $0.8$ se non lo ha.
+
+Le condizioni da rispettare sono: brezza in $[1,2]$ $\Rightarrow$ pozzo in $[1,3]$ o in $[2,2]$; brezza in $[2,1]$ $\Rightarrow$ pozzo in $[2,2]$ o in $[3,1]$.
+
+\begin{center}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{c c c c c}
+    \toprule
+    \intest{$P_{1,3}$} & \intest{$P_{2,2}$} & \intest{$P_{3,1}$} & \intest{Coerente?} & \intest{$P(\fringe)$} \\
+    \midrule
+    \vero & \vero & \vero & sì & $0.2 \cdot 0.2 = 0.04$ \\
+    \vero & \vero & \falso & sì & $0.2 \cdot 0.8 = 0.16$ \\
+    \vero & \falso & \vero & sì & $0.8 \cdot 0.2 = 0.16$ \\
+    \vero & \falso & \falso & \nota{no: $[2,1]$ senza causa} & -- \\
+    \midrule
+    \falso & \vero & \vero & sì & $0.04$ \\
+    \falso & \vero & \falso & sì & $0.16$ \\
+    \falso & \falso & \vero & \nota{no: $[1,2]$ senza causa} & -- \\
+    \falso & \falso & \falso & \nota{no} & -- \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+Moltiplicando per la probabilità a priori di $P_{1,3}$ ($0.2$ se vero, $0.8$ se falso) e normalizzando:
+
+\begin{chiave}{Risultato}
+  \[
+    \Pv(P_{1,3} \mid \known, b) = \alpha' \tup{0.2\,(0.04 + 0.16 + 0.16),\; 0.8\,(0.04 + 0.16)}
+    = \alpha' \tup{0.072,\; 0.16} \approx \tup{0.31,\; 0.69}
+  \]
+  Per simmetria lo stesso vale per $[3,1]$. Ripetendo il calcolo per $[2,2]$ (frontiera $\{P_{1,3}, P_{3,1}\}$):
+  \[
+    \Pv(P_{2,2} \mid \known, b) = \alpha' \tup{0.2 \cdot 1,\; 0.8 \cdot 0.04} = \alpha'\tup{0.2,\; 0.032} \approx \tup{0.86,\; 0.14}
+  \]
+\end{chiave}
+
+\textbf{Interpretazione.} Se $[2,2]$ ha un pozzo, entrambe le brezze sono spiegate da sole, qualunque sia il contenuto delle altre caselle (somma $=1$). Se invece $[2,2]$ è libera, servono \emph{contemporaneamente} due pozzi, in $[1,3]$ e in $[3,1]$: un evento poco probabile ($0.04$). Per questo $[2,2]$ è la casella più pericolosa, e l'agente dovrebbe scegliere $[1,3]$ o $[3,1]$.
+
+\subsection{Riepilogo}
+
+\begin{riepilogo}{Punti fondamentali}
+  \begin{itemize}
+    \item La probabilità è un formalismo rigoroso per rappresentare conoscenza incerta.
+    \item La distribuzione congiunta assegna una probabilità a ogni evento atomico.
+    \item Le interrogazioni si risolvono sommando su eventi atomici (inferenza per enumerazione).
+    \item Nei domini non banali la congiunta è troppo grande: bisogna ridurne la dimensione.
+    \item L'indipendenza e, soprattutto, l'indipendenza condizionata forniscono gli strumenti per farlo.
+  \end{itemize}
+\end{riepilogo}
 
 \end{document}
